@@ -4,6 +4,7 @@ A Next.js application built with React, TypeScript, and Tailwind CSS to query Gi
 
 ## Features
 
+- Project bootstrapped with command `npx create-next-app@latest <dir> --typescript --eslint`
 - Dynamic backend selection via buttons
 - GitHub username input with real-time data fetching
 - Responsive UI with Tailwind CSS
@@ -11,21 +12,27 @@ A Next.js application built with React, TypeScript, and Tailwind CSS to query Gi
 ## Setup
 
 1. **Clone the repo**  
-   ```bash
-   git clone https://github.com/jpetrucci49/api-explorer-frontend.git frontend
-   cd frontend
-   ```
+    ```bash
+    git clone https://github.com/jpetrucci49/api-explorer-frontend.git frontend
+    cd frontend
+    ```
 
 2. **Install dependencies**  
-   ```bash
-   npm install
-   ```
+    ```bash
+    npm install
+    ```
 
 3. **Run locally**  
-   ```bash
-   npm run dev
-   ```  
-   Open `http://localhost:3000` in your browser.
+    ```bash
+    npm run dev
+    # or
+    yarn dev
+    # or
+    pnpm dev
+    # or
+    bun dev
+    ```
+    Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## Usage
 
