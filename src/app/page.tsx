@@ -1,10 +1,11 @@
 "use client";
 import { useState } from "react";
+import { GitHubUser } from "../types/Github"
 
 export default function Home() {
   const [backend, setBackend] = useState("node");
   const [username, setUsername] = useState("");
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<GitHubUser | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   // backends planned, but not yet built.
@@ -38,17 +39,21 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen p-8 bg-gray-100">
-      <div className="max-w-2xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6 text-center">API Explorer</h1>
+    <main className="min-h-screen p-8">
+      <div className="max-w-2xl mx-auto space-y-6">
+        <h1 className="text-4xl font-bold text-center tracking-tight">
+          API Explorer
+        </h1>
 
-        <div className="flex flex-wrap gap-2 mb-4">
+        <div className="flex flex-wrap justify-center gap-3">
           {backends.map((b) => (
             <button
               key={b.id}
               onClick={() => setBackend(b.id)}
-              className={`px-4 py-2 rounded ${
-                backend === b.id ? "bg-blue-500 text-white" : "bg-gray-200"
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                backend === b.id
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
               }`}
             >
               {b.label}
@@ -56,24 +61,27 @@ export default function Home() {
           ))}
         </div>
 
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Enter GitHub username"
-          className="w-full p-2 mb-4 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Enter GitHub username"
+            className="flex-1 p-3 text-lg border border-gray-300 rounded-md bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:border-gray-600"
+          />
+          <button
+            onClick={fetchData}
+            className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          >
+            Fetch Data
+          </button>
+        </div>
 
-        <button
-          onClick={fetchData}
-          className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-          Fetch Data
-        </button>
-
-        {error && <p className="mt-4 text-red-500">{error}</p>}
+        {error && (
+          <p className="text-red-600 text-lg font-medium">{error}</p>
+        )}
         {data && (
-          <pre className="mt-4 p-4 bg-white rounded shadow overflow-auto">
+          <pre className="p-4 bg-gray-800 text-gray-100 rounded-md text-sm font-mono overflow-auto shadow-md">
             {JSON.stringify(data, null, 2)}
           </pre>
         )}
