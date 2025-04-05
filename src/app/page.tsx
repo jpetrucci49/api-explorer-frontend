@@ -1,6 +1,7 @@
 "use client";
+import React from 'react';
 import { useState } from "react";
-import { GitHubUser } from "../types/Github"
+import { GitHubUser } from "../types/github";
 
 export default function Home() {
   const [backend, setBackend] = useState("node");
@@ -8,7 +9,6 @@ export default function Home() {
   const [data, setData] = useState<GitHubUser | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // backends planned, but not yet built.
   const backends = [
     { id: "node", label: "Node.js", url: "http://localhost:3001" },
     { id: "fastapi", label: "FastAPI", url: "http://localhost:3002" },
