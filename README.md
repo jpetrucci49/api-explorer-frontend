@@ -1,13 +1,14 @@
 # API Explorer Frontend
 
-A Next.js application built with React, TypeScript, and Tailwind CSS to query GitHub user data through multiple backend APIs. Select a backend (Node.js, FastAPI, Django, Rails, or Deno) and fetch user details like repos and stars.
+A Next.js application built with React, TypeScript, and Tailwind CSS to query GitHub user data through multiple backend APIs. Select a backend and fetch user details with cache status.
 
 ## Features
 
-- Project bootstrapped with command `npx create-next-app@latest <dir> --typescript --eslint`
-- Dynamic backend selection via buttons
-- GitHub username input with real-time data fetching
-- Responsive UI with Tailwind CSS
+- Bootstrapped with `npx create-next-app@latest --typescript --eslint`.
+- Dynamic backend selection (Node.js, FastAPI, Django, Rails, Deno).
+- GitHub username input with real-time fetching.
+- Displays cache status (`X-Cache: HIT/MISS`).
+- Responsive UI with Tailwind CSS.
 
 ## Setup
 
@@ -32,30 +33,28 @@ A Next.js application built with React, TypeScript, and Tailwind CSS to query Gi
     # or
     bun dev
     ```
-    Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+    Open [http://localhost:3000](http://localhost:3000) with your browser. Requires at least one backend running to see the result.
 
 ## Usage
 
-- Select a backend from the buttons
-- Enter a GitHub username (e.g., "octocat")
-- Click "Fetch Data" to see the results
+- Select a backend (e.g., Deno at `http://localhost:3005`).
+- Enter a GitHub username (e.g., "octocat").
+- Click "Fetch Data" to see results and cache status.
 
 ## Backends
 
-This frontend connects to five backend APIs:
-
-- [Node.js/Express](https://github.com/jpetrucci49/api-explorer-node)
-- [Python/FastAPI](https://github.com/jpetrucci49/api-explorer-fastapi)
-- [Python/Django](https://github.com/jpetrucci49/api-explorer-django)
-- [Ruby/Rails](https://github.com/jpetrucci49/api-explorer-rails)
-- [Deno](https://github.com/jpetrucci49/api-explorer-deno)
-
-Run at least one backend locally for basic functionality, or all 5 backends for full functionality.
+Connects to:
+- [Node.js/Express](https://github.com/jpetrucci49/api-explorer-node) (3001)
+- [FastAPI](https://github.com/jpetrucci49/api-explorer-fastapi) (3002)
+- [Django](https://github.com/jpetrucci49/api-explorer-django) (3003)
+- [Rails](https://github.com/jpetrucci49/api-explorer-rails) (3004)
+- [Deno](https://github.com/jpetrucci49/api-explorer-deno) (3005)
 
 ## Next Steps
 
-- Deploy to Vercel
-- Enhance UI with data visualization
+- Add `/analyze` support for profile insights with visualizations (e.g., language charts).
+- Add `/network` support for collaboration graphs.
+- Deploy to Vercel.
 
 ---
 
