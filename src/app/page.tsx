@@ -35,8 +35,8 @@ export default function Home() {
       setAnalysisData(null);
       setCacheStatus(null);
 
-      if (targetBackend !== "deno" && targetBackend !== "node" && targetEndpoint === "analyze") {
-        throw new Error("The analyze endpoint is only available on Deno and Node for now—stay tuned!");
+      if (targetBackend !== "deno" && targetBackend !== "node" && targetBackend !== "fastapi" && targetEndpoint === "analyze") {
+        throw new Error("The analyze endpoint is only available on Deno, Node and fastapi for now—stay tuned!");
       }
 
       const res = await fetch(`${selectedBackend.url}/${targetEndpoint}?username=${fetchUsername}`);
