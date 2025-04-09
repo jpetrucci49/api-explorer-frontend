@@ -33,3 +33,11 @@ export interface GitHubUser {
     "created_at"?: string,
     "updated_at"?: string,
   }
+
+export interface AnalysisData {
+  login: string;
+  publicRepos: number;
+  topLanguages: { lang: string; bytes: number }[];
+}
+
+export type Endpoints = "github" | "analyze"
