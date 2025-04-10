@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { GitHubUser, AnalysisData, Endpoints } from "../types";
+import Spinner from "../components/Spinner"; // Adjust path as needed
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -24,12 +25,14 @@ export default function Home() {
   const [analysisData, setAnalysisData] = useState<AnalysisData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [cacheStatus, setCacheStatus] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false)
 
   const fetchData = async (targetEndpoint: Endpoints, targetBackend: BackendId, fetchUsername: string) => {
     const selectedBackend = backends.find((b) => b.id === targetBackend);
     if (!selectedBackend || !fetchUsername.trim()) return;
 
     try {
+      setLoading(true)
       setError(null);
       setGithubData(null);
       setAnalysisData(null);
@@ -48,6 +51,8 @@ export default function Home() {
       setCacheStatus(res.headers.get("X-Cache"));
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -100,6 +105,7 @@ export default function Home() {
               key={b.id}
               onClick={() => handleStateChange(setBackend, b.id, endpoint, b.id)}
               className={buttonClass(backend === b.id)}
+              disabled={loading}
             >
               {b.label}
             </button>
@@ -118,8 +124,9 @@ export default function Home() {
           <button
             onClick={() => fetchData(endpoint, backend, username)}
             className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+            disabled={loading}
           >
-            Fetch Data
+            {loading ? "Fetching..." : "Fetch Data"}
           </button>
         </div>
 
@@ -129,12 +136,14 @@ export default function Home() {
               key={ep}
               onClick={() => handleStateChange(setEndpoint, ep, ep)}
               className={buttonClass(endpoint === ep)}
+              disabled={loading}
             >
               {ep === "github" ? "GitHub Data" : "Profile Analysis"}
             </button>
           ))}
         </div>
 
+        {loading && <Spinner />}
         {error && <p className="text-red-600 text-lg font-medium">{error}</p>}
         {cacheStatus && <p className="text-lightgray-600 text-lg">Cache: {cacheStatus}</p>}
 
