@@ -17,7 +17,7 @@ export default function Home() {
 
   type BackendId = typeof backends[number]["id"];
 
-  const [backend, setBackend] = useState<BackendId>("deno");
+  const [backend, setBackend] = useState<BackendId>("node");
   const [username, setUsername] = useState("");
   const [endpoint, setEndpoint] = useState<Endpoints>("github");
   const [githubData, setGithubData] = useState<GitHubUser | null>(null);
@@ -34,10 +34,6 @@ export default function Home() {
       setGithubData(null);
       setAnalysisData(null);
       setCacheStatus(null);
-
-      if (targetBackend !== "deno" && targetBackend !== "node" && targetBackend !== "fastapi" && targetEndpoint === "analyze") {
-        throw new Error("The analyze endpoint is only available on Deno, Node and fastapi for now—stay tuned!");
-      }
 
       const res = await fetch(`${selectedBackend.url}/${targetEndpoint}?username=${fetchUsername}`);
       if (!res.ok) {
