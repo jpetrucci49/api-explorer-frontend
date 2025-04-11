@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { GitHubUser, AnalysisData, Endpoints } from "../types";
-import Spinner from "../components/Spinner"; // Adjust path as needed
+import { Spinner, ActionButton } from "../components";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -49,6 +49,30 @@ export default function Home() {
       if (targetEndpoint === "github") setGithubData(result as GitHubUser);
       if (targetEndpoint === "analyze") setAnalysisData(result as AnalysisData);
       setCacheStatus(res.headers.get("X-Cache"));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const clearCache = async (targetBackend: BackendId) => {
+    const selectedBackend = backends.find((b) => b.id === targetBackend);
+    if (!selectedBackend) return;
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      const res = await fetch(`${selectedBackend.url}/clear-cache`, { method: "POST" });
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.detail || "Failed to clear cache");
+      }
+
+      setCacheStatus(null);
+      setError("Cache cleared successfully");
+      setTimeout(() => setError(null), 3000)
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
@@ -121,13 +145,20 @@ export default function Home() {
             placeholder="Enter GitHub username"
             className="flex-1 p-3 text-lg border border-gray-300 rounded-md bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:border-gray-600"
           />
-          <button
+          <ActionButton
             onClick={() => fetchData(endpoint, backend, username)}
-            className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-            disabled={loading}
-          >
-            {loading ? "Fetching..." : "Fetch Data"}
-          </button>
+            isLoading={loading}
+            loadingText="Fetching..."
+            notLoadingText="Fetch Data"
+            color="blue"
+          />
+          <ActionButton
+            onClick={() => clearCache(backend)}
+            isLoading={loading}
+            loadingText="Clearing..."
+            notLoadingText="Empty Cache"
+            color="red"
+          />
         </div>
 
         <div className="flex gap-2 justify-center">
