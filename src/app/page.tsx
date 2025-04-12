@@ -25,14 +25,17 @@ export default function Home() {
   const [analysisData, setAnalysisData] = useState<AnalysisData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [cacheStatus, setCacheStatus] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
+  const [isClearing, setIsClearing] = useState(false);
 
   const fetchData = async (targetEndpoint: Endpoints, targetBackend: BackendId, fetchUsername: string) => {
     const selectedBackend = backends.find((b) => b.id === targetBackend);
     if (!selectedBackend || !fetchUsername.trim()) return;
 
     try {
-      setLoading(true)
+      setLoading(true);
+      setIsFetching(true);
       setError(null);
       setGithubData(null);
       setAnalysisData(null);
@@ -44,7 +47,7 @@ export default function Home() {
         throw new Error(errorData.detail || "Failed to fetch data");
       }
 
-      const result = await res.json()
+      const result = await res.json();
 
       if (targetEndpoint === "github") setGithubData(result as GitHubUser);
       if (targetEndpoint === "analyze") setAnalysisData(result as AnalysisData);
@@ -53,6 +56,7 @@ export default function Home() {
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setLoading(false);
+      setIsFetching(false);
     }
   };
 
@@ -62,6 +66,7 @@ export default function Home() {
 
     try {
       setLoading(true);
+      setIsClearing(true);
       setError(null);
 
       const res = await fetch(`${selectedBackend.url}/clear-cache`, { method: "POST" });
@@ -72,11 +77,12 @@ export default function Home() {
 
       setCacheStatus(null);
       setError("Cache cleared successfully");
-      setTimeout(() => setError(null), 3000)
+      setTimeout(() => setError(null), 3000);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setLoading(false);
+      setIsClearing(false);
     }
   };
 
@@ -148,6 +154,7 @@ export default function Home() {
           <ActionButton
             onClick={() => fetchData(endpoint, backend, username)}
             isLoading={loading}
+            isActive={isFetching}
             loadingText="Fetching..."
             notLoadingText="Fetch Data"
             color="blue"
@@ -155,6 +162,7 @@ export default function Home() {
           <ActionButton
             onClick={() => clearCache(backend)}
             isLoading={loading}
+            isActive={isClearing}
             loadingText="Clearing..."
             notLoadingText="Empty Cache"
             color="red"
