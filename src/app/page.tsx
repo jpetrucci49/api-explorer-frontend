@@ -44,7 +44,8 @@ export default function Home() {
       const res = await fetch(`${selectedBackend.url}/${targetEndpoint}?username=${fetchUsername}`);
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.detail || "Failed to fetch data");
+        const { status, detail, extra } = errorData.detail || { status: res.status, detail: "Failed to fetch data", extra: {} };
+        throw new Error(`Error ${status}: ${detail}${extra.remaining ? ` (Remaining: ${extra.remaining})` : ""}`);
       }
 
       const result = await res.json();
@@ -72,7 +73,8 @@ export default function Home() {
       const res = await fetch(`${selectedBackend.url}/clear-cache`, { method: "POST" });
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.detail || "Failed to clear cache");
+        const { status, detail, extra } = errorData.detail || { status: res.status, detail: "Failed to clear cache", extra: {} };
+        throw new Error(`Error ${status}: ${detail}${extra.remaining ? ` (Remaining: ${extra.remaining})` : ""}`);
       }
 
       setCacheStatus(null);
